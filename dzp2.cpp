@@ -511,7 +511,10 @@ bool Obidji(Graph &myGraph)
 			}
 			std::cout << "Ulaz: " << *(myGraph.niz[myGraph.ulaz]->GetHead()->myNode) << std::endl;
 			myGraph.niz[myGraph.ulaz]->GetHead()->myNode->posecen = true;
-			Red.Dodaj(myGraph.niz[myGraph.ulaz]->GetHead());
+			lstNode *cvorPom = new lstNode();
+			cvorPom->myNode = myGraph.niz[myGraph.ulaz]->GetHead()->myNode;
+			Red.Dodaj(cvorPom);
+			lstNode *cvorPom2;
 			while (Red.GetHead() != nullptr)
 			{
 				lstNode *pom = Red.Pop();
@@ -524,7 +527,9 @@ bool Obidji(Graph &myGraph)
 						if (tmp->myNode->GetKategorija() == IZLAZ)
 							return true;
 						tmp->myNode->posecen = true;
-						Red.Dodaj(tmp);
+						cvorPom2 = new lstNode();
+						cvorPom2->myNode = tmp->myNode;
+						Red.Dodaj(cvorPom2);
 					}
 					tmp = tmp->next;
 				}
@@ -571,7 +576,11 @@ int main()
 				}
 				break;
 			case 3:
-				Obidji(Maze);
+				if (Obidji(Maze))
+					std::cout << "\n\nAlgoritam je nasao izlaz iz lavirinta!\n";
+				else
+					std::cout << "\n\nAlgoritam nije uspeo da nadje izlaz iz lavirinta!\n";
+				
 				break;
 			case 4:
 				BrisiGraf(Maze);
