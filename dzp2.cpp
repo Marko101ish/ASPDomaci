@@ -1,6 +1,6 @@
 #include <iostream>
 #include<string>
-
+#include<fstream>
 
 #pragma region Heder
 
@@ -346,7 +346,7 @@ void Init(Graph &myGraph, bool tekst = false)
 		std::cin >> myGraph.width >> myGraph.height;
 		std::cin.clear();
 		std::cin.ignore();
-	} while ((myGraph.width <= 0 || myGraph.height <= 0) || (myGraph.width > 80 || myGraph.height > 50) && tekst);
+	} while ((myGraph.width <= 0 || myGraph.height <= 0) || (myGraph.width > 80 || myGraph.height > 50) && !tekst);
 
 	do
 	{
@@ -383,14 +383,20 @@ void Init(Graph &myGraph, bool tekst = false)
 }
 
 
-void DrawMaze(Graph &myGraph)
+void DrawMaze(Graph &myGraph, bool tekst = false)
 {
+
 	if (myGraph.width != 0 && myGraph.height != 0)
 	{
 		Node *tmpNode;
 		List *tmpList;
 		std::string outWalls, outIL;
 		int ind;
+		std::ofstream ofs;
+		if (tekst)
+		{
+			ofs.open("Lavirint.txt", std::fstream::out);
+		}
 		for (int i = 0; i < myGraph.height; i++)
 		{
 			if (i == 0 || i == myGraph.height - 1)
@@ -449,22 +455,44 @@ void DrawMaze(Graph &myGraph)
 			}
 			if (i == 0)
 			{
-				std::cout << outWalls << std::endl;
-				std::cout << outIL << std::endl;
+				if (tekst)
+				{
+					ofs << outWalls << std::endl;
+					ofs << outIL << std::endl;
+				}
+				else
+				{
+					std::cout << outWalls << std::endl;
+					std::cout << outIL << std::endl;
+				}
+
 				outWalls = "";
 			}
 			else if (i == myGraph.height - 1)
 			{
-				std::cout << outIL << std::endl;
-				std::cout << outWalls << std::endl;
+				if (tekst)
+				{
+					ofs << outIL << std::endl;
+					ofs << outWalls << std::endl;
+				}
+				else
+				{
+					std::cout << outIL << std::endl;
+					std::cout << outWalls << std::endl;
+				}
 				outWalls = "";
 			}
 			else
 			{
-				std::cout << outIL << std::endl;
+				if(tekst)
+					ofs << outIL << std::endl;
+				else
+					std::cout << outIL << std::endl;
 			}
 			outIL = "";
 		}
+		if (tekst)
+			ofs.close();
 	}
 	else
 		std::cout << "Ne postoji lavirint!\n";
@@ -539,7 +567,7 @@ int main()
 			case 2:
 				while (DodajGranu(Maze))
 				{
-					DrawMaze(Maze);
+					DrawMaze(Maze, tekst);
 				}
 				break;
 			case 3:
@@ -549,7 +577,7 @@ int main()
 				BrisiGraf(Maze);
 				break;
 			case 5:
-				DrawMaze(Maze);
+				DrawMaze(Maze, tekst);
 				break;
 		}
 		case 6:
